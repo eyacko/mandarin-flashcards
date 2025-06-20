@@ -8,7 +8,7 @@ You will need to have Python installed.
 
 ## Default behaviour
 
-To run using the defaults, simply enter `python flashcards.py` in your terminal. You will have 5 attempts to guess each word in the selected deck. The words will be shown in Chinese characters and Hanyu Pinyin, and you will need to enter the English translation. If you answer correctly within the maximum number of attempts, the next word will be shown. Otherwise, you will be prompted again with the same word. If you do not enter the correct response within the maximum number of attempts, the correct answer will be shown and you will be prompted with the next word. The order of words is randomized each time.
+To run using the defaults, simply enter `python flashcards.py <deck_name>` in your terminal. You will have 5 attempts to guess each word in the selected deck. The words will be shown in Chinese characters and Hanyu Pinyin, and you will need to enter the English translation. If you answer correctly within the maximum number of attempts, the next word will be shown. Otherwise, you will be prompted again with the same word. If you do not enter the correct response within the maximum number of attempts, the correct answer will be shown and you will be prompted with the next word. The order of words is randomized each time.
 
 ## Customization
 
