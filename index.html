@@ -32,6 +32,7 @@
   <p id="question"></p>
   <input type="text" id="answer" placeholder="Your answer" />
   <p id="result"></p>
+  <button id="giveUpButton" style="display: none;" onclick="giveUp()">Give Up</button>
 </div>
 
   <script>
@@ -105,6 +106,7 @@
         document.getElementById('answer').value = '';
         document.getElementById('result').textContent = '';
 	document.getElementById('answer').focus();
+	document.getElementById('giveUpButton').style.display = 'inline-block';
       } else {
         document.getElementById('quiz').innerHTML = "<h2>Deck completed!</h2>";
       }
@@ -128,6 +130,7 @@
         result.style.color = "green";
 	entry.retries = 0;
 	waitingForNext = true;
+	document.getElementById('giveUpButton').style.display = 'none';
       } else {
 	entry.retries++;
 	if (entry.retries < maxAttempts) {
@@ -141,9 +144,21 @@
           result.style.color = "red";
 	  entry.retries = 0;
           waitingForNext = true;
+          document.getElementById('giveUpButton').style.display = 'none';
 	}
       }
       current++;
+    }
+    function giveUp() {
+      const entry = questions[current];
+      const expected = (mode === 'qa') ? entry.answer : entry.question;
+
+      const result = document.getElementById('result');
+      result.textContent = `The correct answer was: ${expected}`;
+      result.style.color = "red";
+      entry.retries = 0;
+      waitingForNext = true;
+      document.getElementById('giveUpButton').style.display = 'none';
     }
     document.addEventListener("DOMContentLoaded", function () {
       const input = document.getElementById('answer');
