@@ -9,22 +9,24 @@
   </style>
 </head>
 <body>
-  <h1>Flashcards</h1>
-  <div id="quiz">
-    <p id="question">Loading...</p>
-    <input type="text" id="answer" placeholder="Your answer" />
-    <p id="result"></p>
-  </div>
+  <h1 id="title">Flashcards</h1>
+  <p id="instructions">Welcome!</p>
 <div id="setup">
+  <label for="maxAttempts">Max attempts per card</label>
+  <input type="number" id="maxAttempts" min="1" max="10" value="5" />
+  <br></br>
   <label for="modeSelect">Choose language to respond in:</label>
   <select id="modeSelect">
     <option value="qa">汉语</option>
     <option value="aq">English</option>
   </select>
+  <br></br>
   <label for="fileSelect">Choose a flashcard deck:</label>
   <select id="fileSelect" onchange="loadSelectedFile()">
     <option value="">--Select--</option>
   </select>
+  <br></br>
+  <button id="startButton" style="display: none;" onclick="startQuiz()">Start!</button>
 </div>
 <div id="quiz" style="display: none;">
   <p id="question"></p>
@@ -37,6 +39,7 @@
     let current = 0;
     let mode = 'qa';
     let waitingForNext = false;
+    let maxAttempts = 5;
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -59,28 +62,40 @@
     });
     function loadSelectedFile() {
       const file = document.getElementById('fileSelect').value;
-      if (!file) return;
+      if (!file) {
+        document.getElementById('startButton').style.display = 'none';
+	return;
+      }
 
       mode = document.getElementById('modeSelect').value;
-
-      document.getElementById('setup').style.display = 'none';
-      document.getElementById('quiz').style.display = 'block';
 
       fetch(file)
       .then(response => response.text())
       .then(text => {
         questions = text.trim().split('\n').slice(1).map(line => {
           const [q, a] = line.split(',');
-          return { question: q, answer: a.trim() };
+          return { question: q, answer: a.trim(), retries: 0 };
         });
 
 	shuffle(questions);
         current = 0;
-        showQuestion();
+        
+	document.getElementById('startButton').style.display = 'inline-block';
       })
       .catch(err => {
         document.getElementById('question').textContent = "Error loading file.";
       });
+    }
+    function startQuiz() {
+      maxAttempts = parseInt(document.getElementById('maxAttempts').value) || 5;
+
+      document.getElementById('setup').style.display = 'none';
+      document.getElementById('title').style.display = 'none';
+      document.getElementById('instructions').style.display = 'none';
+      document.getElementById('quiz').style.display = 'block';
+      document.getElementById('startButton').style.display = 'none';
+
+      showQuestion();
     }
     function showQuestion() {
       if (current < questions.length) {
@@ -111,13 +126,23 @@
       if (userAnswer.toLowerCase() === expected.toLowerCase()) {
         result.textContent = "Correct!";
         result.style.color = "green";
+	entry.retries = 0;
 	waitingForNext = true;
       } else {
-        result.textContent = `Incorrect. The correct answer was: ${expected}`;
-        result.style.color = "red";
-	waitingForNext = true;
+	entry.retries++;
+	if (entry.retries < maxAttempts) {
+	  result.textContent = `Try again. ${maxAttempts - entry.retries} attempts remaining`;
+          result.style.color = "red";
+	  document.getElementById('answer').value = '';
+	  document.getElementById('answer').focus();
+	  return;
+	} else {
+          result.textContent = `Incorrect. The correct answer was: ${expected}`;
+          result.style.color = "red";
+	  entry.retries = 0;
+          waitingForNext = true;
+	}
       }
-
       current++;
     }
     document.addEventListener("DOMContentLoaded", function () {
