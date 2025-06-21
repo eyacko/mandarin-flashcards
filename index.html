@@ -17,12 +17,13 @@
   <br></br>
   <label for="modeSelect">Choose language to respond in:</label>
   <select id="modeSelect">
+    <option value="">--Select--</option>
     <option value="qa">汉语</option>
     <option value="aq">English</option>
   </select>
   <br></br>
   <label for="fileSelect">Choose a flashcard deck:</label>
-  <select id="fileSelect" onchange="loadSelectedFile()">
+  <select id="fileSelect">
     <option value="">--Select--</option>
   </select>
   <br></br>
@@ -62,13 +63,23 @@
 	});
     });
     function loadSelectedFile() {
-      const file = document.getElementById('fileSelect').value;
-      if (!file) {
-        document.getElementById('startButton').style.display = 'none';
-	return;
-      }
+      updateStartButtonVisibility();
+    }
+    function updateStartButtonVisibility() {
+      const fileSelected = document.getElementById('fileSelect').value;
+      const modeSelected = document.getElementById('modeSelect').value;
+      const startButton = document.getElementById('startButton');
 
+      if (fileSelected && modeSelected) {
+        startButton.style.display = 'inline-block';
+      } else {
+        startButton.style.display = 'none';
+      }
+    }
+    function startQuiz() {
+      const file = document.getElementById('fileSelect').value;
       mode = document.getElementById('modeSelect').value;
+      maxAttempts = parseInt(document.getElementById('maxAttempts').value) || 5;
 
       fetch(file)
       .then(response => response.text())
@@ -80,23 +91,18 @@
 
 	shuffle(questions);
         current = 0;
-        
-	document.getElementById('startButton').style.display = 'inline-block';
+
+        document.getElementById('setup').style.display = 'none';
+        document.getElementById('title').style.display = 'none';
+        document.getElementById('instructions').style.display = 'none';
+        document.getElementById('quiz').style.display = 'block';
+        document.getElementById('startButton').style.display = 'none';
+
+        showQuestion();
       })
       .catch(err => {
         document.getElementById('question').textContent = "Error loading file.";
       });
-    }
-    function startQuiz() {
-      maxAttempts = parseInt(document.getElementById('maxAttempts').value) || 5;
-
-      document.getElementById('setup').style.display = 'none';
-      document.getElementById('title').style.display = 'none';
-      document.getElementById('instructions').style.display = 'none';
-      document.getElementById('quiz').style.display = 'block';
-      document.getElementById('startButton').style.display = 'none';
-
-      showQuestion();
     }
     function showQuestion() {
       if (current < questions.length) {
@@ -161,8 +167,10 @@
       document.getElementById('giveUpButton').style.display = 'none';
     }
     document.addEventListener("DOMContentLoaded", function () {
-      const input = document.getElementById('answer');
-      input.addEventListener('keydown', function (event) {
+      document.getElementById('fileSelect').addEventListener('change', updateStartButtonVisibility);
+      document.getElementById('modeSelect').addEventListener('change', updateStartButtonVisibility);
+
+      document.getElementById('answer').addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
           submitAnswer();
         }
