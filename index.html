@@ -15,20 +15,28 @@
     <input type="text" id="answer" placeholder="Your answer" />
     <p id="result"></p>
   </div>
-<label for="modeSelect">Choose language to respond in:</label>
-<select id="modeSelect">
-  <option value="qa">汉语</option>
-  <option value="aq">English</option>
-</select>
-<label for="fileSelect">Choose a flashcard deck:</label>
-<select id="fileSelect" onchange="loadSelectedFile()">
-  <option value="">--Select--</option>
-</select>
+<div id="setup">
+  <label for="modeSelect">Choose language to respond in:</label>
+  <select id="modeSelect">
+    <option value="qa">汉语</option>
+    <option value="aq">English</option>
+  </select>
+  <label for="fileSelect">Choose a flashcard deck:</label>
+  <select id="fileSelect" onchange="loadSelectedFile()">
+    <option value="">--Select--</option>
+  </select>
+</div>
+<div id="quiz" style="display: none;">
+  <p id="question"></p>
+  <input type="text" id="answer" placeholder="Your answer" />
+  <p id="result"></p>
+</div>
 
   <script>
     let questions = [];
     let current = 0;
     let mode = 'qa';
+    let waitingForNext = false;
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -55,6 +63,9 @@
 
       mode = document.getElementById('modeSelect').value;
 
+      document.getElementById('setup').style.display = 'none';
+      document.getElementById('quiz').style.display = 'block';
+
       fetch(file)
       .then(response => response.text())
       .then(text => {
@@ -80,11 +91,17 @@
         document.getElementById('result').textContent = '';
 	document.getElementById('answer').focus();
       } else {
-        document.getElementById('quiz').innerHTML = "<h2>Quiz Complete!</h2>";
+        document.getElementById('quiz').innerHTML = "<h2>Deck completed!</h2>";
       }
     }
 
     function submitAnswer() {
+      if (waitingForNext) {
+        waitingForNext = false;
+	current++;
+	showQuestion();
+	return;
+      }
       const userAnswer = document.getElementById('answer').value.trim();
       const entry = questions[current];
       const expected = (mode === 'qa') ? entry.answer : entry.question;
@@ -92,15 +109,16 @@
       const result = document.getElementById('result');
 
       if (userAnswer.toLowerCase() === expected.toLowerCase()) {
-        result.textContent = "✅ Correct!";
+        result.textContent = "Correct!";
         result.style.color = "green";
+	waitingForNext = true;
       } else {
-        result.textContent = `❌ Incorrect. The correct answer was: ${expected}`;
+        result.textContent = `Incorrect. The correct answer was: ${expected}`;
         result.style.color = "red";
+	waitingForNext = true;
       }
 
       current++;
-      setTimeout(showQuestion, 1500);  // Move to next question after 1.5s
     }
     document.addEventListener("DOMContentLoaded", function () {
       const input = document.getElementById('answer');
