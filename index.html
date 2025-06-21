@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mandarin Flashcards</title>
+  <style>
+    body { font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif; margin: 2em; }
+    #result { margin-top: 1em; }
+  </style>
+</head>
+<body>
+  <h1>Flashcards</h1>
+  <div id="quiz">
+    <p id="question">Loading...</p>
+    <input type="text" id="answer" placeholder="Your answer" />
+    <p id="result"></p>
+  </div>
+<label for="modeSelect">Choose language to respond in:</label>
+<select id="modeSelect">
+  <option value="qa">汉语</option>
+  <option value="aq">English</option>
+</select>
+<label for="fileSelect">Choose a flashcard deck:</label>
+<select id="fileSelect" onchange="loadSelectedFile()">
+  <option value="">--Select--</option>
+</select>
+
+  <script>
+    let questions = [];
+    let current = 0;
+    let mode = 'qa';
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    // Load CSV file
+    fetch('decks.json')
+      .then(response => response.json())
+      .then(files => {
+        const select = document.getElementById('fileSelect');
+        files.forEach(file => {
+	  const option = document.createElement('option');
+	  option.value = file.path;
+	  option.textContent = file.topic;
+	  select.appendChild(option);
+	});
+    });
+    function loadSelectedFile() {
+      const file = document.getElementById('fileSelect').value;
+      if (!file) return;
+
+      mode = document.getElementById('modeSelect').value;
+
+      fetch(file)
+      .then(response => response.text())
+      .then(text => {
+        questions = text.trim().split('\n').slice(1).map(line => {
+          const [q, a] = line.split(',');
+          return { question: q, answer: a.trim() };
+        });
+
+	shuffle(questions);
+        current = 0;
+        showQuestion();
+      })
+      .catch(err => {
+        document.getElementById('question').textContent = "Error loading file.";
+      });
+    }
+    function showQuestion() {
+      if (current < questions.length) {
+	const entry = questions[current];
+	const prompt = (mode === 'qa') ? entry.question : entry.answer;
+        document.getElementById('question').textContent = prompt;
+        document.getElementById('answer').value = '';
+        document.getElementById('result').textContent = '';
+	document.getElementById('answer').focus();
+      } else {
+        document.getElementById('quiz').innerHTML = "<h2>Quiz Complete!</h2>";
+      }
+    }
+
+    function submitAnswer() {
+      const userAnswer = document.getElementById('answer').value.trim();
+      const entry = questions[current];
+      const expected = (mode === 'qa') ? entry.answer : entry.question;
+
+      const result = document.getElementById('result');
+
+      if (userAnswer.toLowerCase() === expected.toLowerCase()) {
+        result.textContent = "✅ Correct!";
+        result.style.color = "green";
+      } else {
+        result.textContent = `❌ Incorrect. The correct answer was: ${expected}`;
+        result.style.color = "red";
+      }
+
+      current++;
+      setTimeout(showQuestion, 1500);  // Move to next question after 1.5s
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+      const input = document.getElementById('answer');
+      input.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+          submitAnswer();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+[
+	{
+		"topic": "colours",
+		"path": "vocab/colours.csv"
+	},
+	{
+		"topic": "zodiac animals",
+		"path": "vocab/animals/zodiac.csv"
+	},
+	{	"topic": "mammals",
+		"path": "vocab/animals/mammals.csv"
+	},
+	{
+		"topic": "fruits",
+		"path": "vocab/food/fruits.csv"
+	},
+	{
+		"topic": "countries and languages",
+		"path": "vocab/CL110/countries.csv"
+	},
+	{
+		"topic": "week 1 vocab",
+		"path": "vocab/CL110/week1.csv"
+	},
+	{
+		"topic": "week 2 vocab",
+		"path": "vocab/CL110/week2.csv"
+	},
+	{
+		"topic": "week 3 vocab",
+		"path": "vocab/CL110/week3.csv"
+	},
+	{
+		"topic": "week 4 vocab",
+		"path": "vocab/CL110/week4.csv"
+	}
+]
