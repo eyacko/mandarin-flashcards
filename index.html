@@ -33,21 +33,21 @@
   </style>
 </head>
 <body>
-  <h1 id="title">Flashcards</h1>
+  <h1 id="title">Mandarin Flashcards</h1>
 <div id="setup">
   <p id="instructions">Welcome!</p>
   <label for="maxAttempts">Max attempts per card</label>
   <input type="number" id="maxAttempts" min="1" max="10" value="3" />
   <br></br>
-  <label for="modeSelect">Choose language to respond in:</label>
-  <select id="modeSelect">
+  <label for="langSelect">Choose language to respond in:</label>
+  <select id="langSelect">
     <option value="">--Select--</option>
-    <option value="qa">汉语</option>
-    <option value="aq">English</option>
+    <option value="ch">汉语</option>
+    <option value="eng">English</option>
   </select>
   <br></br>
-  <label for="fileSelect">Choose a flashcard deck:</label>
-  <select id="fileSelect">
+  <label for="deckSelect">Choose a flashcard deck:</label>
+  <select id="deckSelect">
     <option value="">--Select--</option>
   </select>
   <br></br>
@@ -63,11 +63,11 @@
 <canvas id="faceCanvas" width="150" height="150" style="margin-top: 2em;"></canvas>
 
   <script>
-    let questions = [];
+    let cards = [];
     let current = 0;
-    let mode = 'qa';
+    let lang = 'ch';
     let waitingForNext = false;
-    let maxAttempts = 5;
+    let maxAttempts = 3;
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -80,7 +80,7 @@
     fetch('decks.json')
       .then(response => response.json())
       .then(files => {
-        const select = document.getElementById('fileSelect');
+        const select = document.getElementById('deckSelect');
         files.forEach(file => {
 	  const option = document.createElement('option');
 	  option.value = file.path;
@@ -92,30 +92,30 @@
       updateStartButtonVisibility();
     }
     function updateStartButtonVisibility() {
-      const fileSelected = document.getElementById('fileSelect').value;
-      const modeSelected = document.getElementById('modeSelect').value;
+      const deckSelected = document.getElementById('deckSelect').value;
+      const langSelected = document.getElementById('langSelect').value;
       const startButton = document.getElementById('startButton');
 
-      if (fileSelected && modeSelected) {
+      if (deckSelected && langSelected) {
         startButton.style.display = 'inline-block';
       } else {
         startButton.style.display = 'none';
       }
     }
     function startQuiz() {
-      const file = document.getElementById('fileSelect').value;
-      mode = document.getElementById('modeSelect').value;
+      const file = document.getElementById('deckSelect').value;
+      lang = document.getElementById('langSelect').value;
       maxAttempts = parseInt(document.getElementById('maxAttempts').value) || 5;
 
       fetch(file)
       .then(response => response.text())
       .then(text => {
-        questions = text.trim().split('\n').slice(1).map(line => {
+        cards = text.trim().split('\n').slice(1).map(line => {
           const [q, a] = line.split(',');
           return { question: q, answer: a.trim(), retries: 0 };
         });
 
-	shuffle(questions);
+	shuffle(cards);
         current = 0;
 
         document.getElementById('setup').style.display = 'none';
@@ -130,9 +130,9 @@
       });
     }
     function showQuestion() {
-      if (current < questions.length) {
-	const entry = questions[current];
-	const prompt = (mode === 'qa') ? entry.question : entry.answer;
+      if (current < cards.length) {
+	const entry = cards[current];
+	const prompt = (lang === 'ch') ? entry.question : entry.answer;
         const canvas = document.getElementById('faceCanvas');
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -158,8 +158,8 @@
 	return;
       }
       const userAnswer = document.getElementById('answer').value.trim();
-      const entry = questions[current];
-      const expected = (mode === 'qa') ? entry.answer : entry.question;
+      const entry = cards[current];
+      const expected = (lang === 'ch') ? entry.answer : entry.question;
 
       const result = document.getElementById('result');
 
@@ -191,8 +191,8 @@
       current++;
     }
     function giveUp() {
-      const entry = questions[current];
-      const expected = (mode === 'qa') ? entry.answer : entry.question;
+      const entry = cards[current];
+      const expected = (lang === 'ch') ? entry.answer : entry.question;
 
       const result = document.getElementById('result');
       result.textContent = `The correct answer was: ${expected}`;
@@ -206,9 +206,9 @@
       document.getElementById('setup').style.display = 'block';
       document.getElementById('title').style.display = 'block';
       document.getElementById('title').textContent = 'Flashcards';
-      document.getElementById('fileSelect').value = '';
-      document.getElementById('modeSelect').value = 'qa';
-      questions = [];
+      document.getElementById('deckSelect').value = '';
+      document.getElementById('langSelect').value = 'ch';
+      cards = [];
       current = 0;
     }
     function drawFace(isHappy) {
@@ -236,8 +236,8 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById('fileSelect').addEventListener('change', updateStartButtonVisibility);
-      document.getElementById('modeSelect').addEventListener('change', updateStartButtonVisibility);
+      document.getElementById('deckSelect').addEventListener('change', updateStartButtonVisibility);
+      document.getElementById('langSelect').addEventListener('change', updateStartButtonVisibility);
 
       document.getElementById('answer').addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
