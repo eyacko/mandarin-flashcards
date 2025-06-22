@@ -58,6 +58,7 @@
   <input type="text" id="answer" placeholder="" />
   <p id="result"></p>
   <button id="giveUpButton" style="display: none;" onclick="giveUp()">Give Up</button>
+  <button id="abortButton" onclick="abortQuiz()">Abort</button>
 </div>
 <button id="playAgainButton" style="display: none; margin-top: 5em;" onclick="resetQuiz()">Play Again</button>
 <canvas id="faceCanvas" width="150" height="150" style="margin-top: 2em;"></canvas>
@@ -146,8 +147,9 @@
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         document.getElementById('quiz').style.display = 'none';
+        document.getElementById('title').textContent = "Deck Complete!";
+        document.getElementById('title').style.display = 'block';
         document.getElementById('playAgainButton').style.display = 'inline-block';
-        document.getElementById('title').textContent = "Quiz Complete!";
       }
     }
     function submitAnswer() {
@@ -188,7 +190,6 @@
           document.getElementById('giveUpButton').style.display = 'none';
 	}
       }
-      current++;
     }
     function giveUp() {
       const entry = cards[current];
@@ -205,11 +206,20 @@
       document.getElementById('playAgainButton').style.display = 'none';
       document.getElementById('setup').style.display = 'block';
       document.getElementById('title').style.display = 'block';
-      document.getElementById('title').textContent = 'Flashcards';
+      document.getElementById('title').textContent = 'Mandarin Flashcards';
       document.getElementById('deckSelect').value = '';
       document.getElementById('langSelect').value = 'ch';
       cards = [];
       current = 0;
+    }
+    function abortQuiz() {
+      document.getElementById('giveUpButton').style.display = 'none';
+      const canvas = document.getElementById('faceCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      document.getElementById('quiz').style.display = 'none';
+
+      resetQuiz();
     }
     function drawFace(isHappy) {
       const canvas = document.getElementById('faceCanvas');
