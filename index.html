@@ -57,6 +57,7 @@
 <div id="quiz" style="display: none;">
   <p id="question"></p>
   <input type="text" id="answer" placeholder="" />
+  <button id="submitButton" onclick="submitAnswer()" style="font-size: 1.2em; background-color: #007BFF; color: white; padding: 0.5em 1em; border: none; border-radius: 5px;">Enter</button>
   <p id="result"></p>
   <p id="hint" style="font-style: italic; color: gray;"></p>
   <button id="hintButton" style="display: none;" onclick="showHint()">Show Hint</button>
@@ -64,7 +65,7 @@
   <button id="abortButton" onclick="abortQuiz()">Abort</button>
 </div>
 <button id="playAgainButton" style="display: none; margin-top: 5em;" onclick="resetQuiz()">Play Again</button>
-<canvas id="faceCanvas" width="150" height="150" style="margin-top: 7em;"></canvas>
+<canvas id="faceCanvas" width="150" height="150" style="margin-top: 5em;"></canvas>
 
   <script>
     let cards = [];
@@ -246,23 +247,37 @@
 
       ctx.beginPath();
       ctx.arc(75, 75, 70, 0, Math.PI * 2); // big circle
+      ctx.fillStyle = '#B07063';
+      ctx.fill();
+      linewidth = 2;
+      ctx.strokeStyle = '#000000';
       ctx.stroke();
 
       ctx.beginPath();
       ctx.arc(50, 60, 7, 0, Math.PI * 2); // left eye
       ctx.arc(100, 60, 7, 0, Math.PI * 2); // right eye
+      ctx.fillStyle = '#000000';
       ctx.fill();
 
       ctx.beginPath();
       ctx.arc(30, 25, 25, Math.PI * 0.75, Math.PI * 1.8, false); // left ear
+      ctx.fillStyle = '#B07063';
+      ctx.fill();
+      linewidth = 2;
+      ctx.strokeStyle = '#000000';
       ctx.stroke();
 
       ctx.beginPath();
       ctx.arc(120, 25, 25, Math.PI * 0.25, Math.PI * 1.2, true); // right ear
+      ctx.fillStyle = '#B07063';
+      ctx.fill();
+      linewidth = 2;
+      ctx.strokeStyle = '#000000';
       ctx.stroke();
 
       ctx.beginPath();
       ctx.ellipse(75, 85, 9, 6, 0, 0, Math.PI * 2); // nose
+      ctx.fillStyle = '#000000';
       ctx.fill();
 
       // mouth
