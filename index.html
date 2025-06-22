@@ -55,6 +55,7 @@
   <p id="result"></p>
   <button id="giveUpButton" style="display: none;" onclick="giveUp()">Give Up</button>
 </div>
+<button id="playAgainButton" style="display: none;" onclick="resetQuiz()">Play Again</button>
 
   <script>
     let questions = [];
@@ -134,10 +135,11 @@
 	document.getElementById('answer').focus();
 	document.getElementById('giveUpButton').style.display = 'inline-block';
       } else {
-        document.getElementById('quiz').innerHTML = "<h2>Deck completed!</h2>";
+        document.getElementById('quiz').style.display = 'none';
+        document.getElementById('playAgainButton').style.display = 'inline-block';
+        document.getElementById('title').textContent = "Quiz Complete!";
       }
     }
-
     function submitAnswer() {
       if (waitingForNext) {
         waitingForNext = false;
@@ -185,6 +187,16 @@
       entry.retries = 0;
       waitingForNext = true;
       document.getElementById('giveUpButton').style.display = 'none';
+    }
+    function resetQuiz() {
+      document.getElementById('playAgainButton').style.display = 'none';
+      document.getElementById('setup').style.display = 'block';
+      document.getElementById('title').style.display = 'block';
+      document.getElementById('title').textContent = 'Flashcards';
+      document.getElementById('fileSelect').value = '';
+      document.getElementById('modeSelect').value = 'qa';
+      questions = [];
+      current = 0;
     }
     document.addEventListener("DOMContentLoaded", function () {
       document.getElementById('fileSelect').addEventListener('change', updateStartButtonVisibility);
