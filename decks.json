@@ -19,19 +19,19 @@
 		"path": "vocab/CL110/countries.csv"
 	},
 	{
-		"topic": "week 1 vocab",
-		"path": "vocab/CL110/week1.csv"
+		"topic": "chapter 1 vocab",
+		"path": "vocab/CL110/ch1.csv"
 	},
 	{
-		"topic": "week 2 vocab",
-		"path": "vocab/CL110/week2.csv"
+		"topic": "chapter 2 vocab",
+		"path": "vocab/CL110/ch2.csv"
 	},
 	{
-		"topic": "week 3 vocab",
-		"path": "vocab/CL110/week3.csv"
+		"topic": "chapter 3 vocab",
+		"path": "vocab/CL110/ch3.csv"
 	},
 	{
-		"topic": "week 4 vocab",
-		"path": "vocab/CL110/week4.csv"
+		"topic": "chapter 4 vocab",
+		"path": "vocab/CL110/ch4.csv"
 	}
 ]

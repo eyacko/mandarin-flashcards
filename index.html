@@ -26,14 +26,18 @@
     #question {
       font-size: 1.5em;
     }
+    #faceCanvas {
+      display: block;
+      margin: 2em auto;
+    }
   </style>
 </head>
 <body>
   <h1 id="title">Flashcards</h1>
-  <p id="instructions">Welcome!</p>
 <div id="setup">
+  <p id="instructions">Welcome!</p>
   <label for="maxAttempts">Max attempts per card</label>
-  <input type="number" id="maxAttempts" min="1" max="10" value="5" />
+  <input type="number" id="maxAttempts" min="1" max="10" value="3" />
   <br></br>
   <label for="modeSelect">Choose language to respond in:</label>
   <select id="modeSelect">
@@ -55,7 +59,8 @@
   <p id="result"></p>
   <button id="giveUpButton" style="display: none;" onclick="giveUp()">Give Up</button>
 </div>
-<button id="playAgainButton" style="display: none;" onclick="resetQuiz()">Play Again</button>
+<button id="playAgainButton" style="display: none; margin-top: 5em;" onclick="resetQuiz()">Play Again</button>
+<canvas id="faceCanvas" width="150" height="150" style="margin-top: 2em;"></canvas>
 
   <script>
     let questions = [];
@@ -115,7 +120,6 @@
 
         document.getElementById('setup').style.display = 'none';
         document.getElementById('title').style.display = 'none';
-        document.getElementById('instructions').style.display = 'none';
         document.getElementById('quiz').style.display = 'block';
         document.getElementById('startButton').style.display = 'none';
 
@@ -129,12 +133,18 @@
       if (current < questions.length) {
 	const entry = questions[current];
 	const prompt = (mode === 'qa') ? entry.question : entry.answer;
+        const canvas = document.getElementById('faceCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         document.getElementById('question').textContent = prompt;
         document.getElementById('answer').value = '';
         document.getElementById('result').textContent = '';
 	document.getElementById('answer').focus();
 	document.getElementById('giveUpButton').style.display = 'inline-block';
       } else {
+        const canvas = document.getElementById('faceCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         document.getElementById('quiz').style.display = 'none';
         document.getElementById('playAgainButton').style.display = 'inline-block';
         document.getElementById('title').textContent = "Quiz Complete!";
@@ -156,6 +166,7 @@
       if (userAnswer.toLowerCase() === expected.toLowerCase()) {
         result.textContent = "Correct!";
         result.style.color = "green";
+	drawFace(true);
 	entry.retries = 0;
 	waitingForNext = true;
 	document.getElementById('giveUpButton').style.display = 'none';
@@ -164,12 +175,14 @@
 	if (entry.retries < maxAttempts) {
 	  result.textContent = `Try again. ${maxAttempts - entry.retries} attempts remaining`;
           result.style.color = "red";
+          drawFace(false);
 	  document.getElementById('answer').value = '';
 	  document.getElementById('answer').focus();
 	  return;
 	} else {
           result.textContent = `Incorrect. The correct answer was: ${expected}`;
           result.style.color = "red";
+          drawFace(false);
 	  entry.retries = 0;
           waitingForNext = true;
           document.getElementById('giveUpButton').style.display = 'none';
@@ -198,6 +211,30 @@
       questions = [];
       current = 0;
     }
+    function drawFace(isHappy) {
+      const canvas = document.getElementById('faceCanvas');
+      const ctx = canvas.getContext('2d');
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.beginPath();
+      ctx.arc(75, 75, 70, 0, Math.PI * 2); // big circle
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(50, 55, 7, 0, Math.PI * 2); // left eye
+      ctx.arc(100, 55, 7, 0, Math.PI * 2); // right eye
+      ctx.fill();
+
+      ctx.beginPath();
+      if (isHappy) {
+        ctx.arc(75, 85, 35, 0, Math.PI, false); // smile
+      } else {
+        ctx.arc(75, 105, 35, 0, Math.PI, true); // frown
+      }
+      ctx.stroke();
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
       document.getElementById('fileSelect').addEventListener('change', updateStartButtonVisibility);
       document.getElementById('modeSelect').addEventListener('change', updateStartButtonVisibility);
