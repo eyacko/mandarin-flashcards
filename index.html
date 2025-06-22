@@ -20,12 +20,16 @@
       outline: none;
       font-size: 1.5em;
       text-align: center;
-      width: 300px;
+      width: 320px;
+      margin: 0 auto;
       padding: 5px;
       background: transparent;
     }
     #question {
       font-size: 1.5em;
+      width: 320px;
+      margin: 0 auto;
+      text-align: center;
     }
     #faceCanvas {
       display: block;
@@ -56,7 +60,8 @@
 </div>
 <div id="quiz" style="display: none;">
   <p id="question"></p>
-  <input type="text" id="answer" placeholder="" />
+  <input type="text" id="answer" placeholder="" style="flex-shrink: 0; width: 320px; text-align: center;"/>
+  <br></br>
   <button id="submitButton" onclick="submitAnswer()" style="font-size: 1.2em; background-color: #007BFF; color: white; padding: 0.5em 1em; border: none; border-radius: 5px;">Enter</button>
   <p id="result"></p>
   <p id="hint" style="font-style: italic; color: gray;"></p>
@@ -177,7 +182,7 @@
       if (userAnswer.toLowerCase() === expected.toLowerCase()) {
         result.textContent = "Correct!";
         result.style.color = "green";
-	drawFace(true);
+	drawFace('happy');
 	entry.retries = 0;
 	waitingForNext = true;
 	document.getElementById('giveUpButton').style.display = 'none';
@@ -186,14 +191,14 @@
 	if (entry.retries < maxAttempts) {
 	  result.textContent = `Try again. ${maxAttempts - entry.retries} attempts remaining`;
           result.style.color = "red";
-          drawFace(false);
+          drawFace('sad');
 	  document.getElementById('answer').value = '';
 	  document.getElementById('answer').focus();
 	  return;
 	} else {
           result.textContent = `Incorrect. The correct answer was: ${expected}`;
           result.style.color = "red";
-          drawFace(false);
+          drawFace('angry');
 	  entry.retries = 0;
           waitingForNext = true;
           document.getElementById('giveUpButton').style.display = 'none';
@@ -239,7 +244,7 @@
       document.getElementById('hintButton').style.display = 'none';
       resetQuiz();
     }
-    function drawFace(isHappy) {
+    function drawFace(emotion) {
       const canvas = document.getElementById('faceCanvas');
       const ctx = canvas.getContext('2d');
 
@@ -281,7 +286,7 @@
       ctx.fill();
 
       // mouth
-      if (isHappy) {
+      if (emotion === 'happy') {
         ctx.beginPath();
         ctx.moveTo(75, 89.5);
         ctx.lineTo(75, 97);
@@ -305,6 +310,16 @@
         ctx.moveTo(75, 99);
         ctx.lineTo(90, 111);
         ctx.stroke();
+      }
+      if (emotion === 'angry') {
+        ctx.beginPath();
+	ctx.moveTo(81, 50);
+	ctx.lineTo(111, 35);
+	ctx.stroke();
+        ctx.beginPath();
+	ctx.moveTo(69, 50);
+	ctx.lineTo(39, 35);
+	ctx.stroke();
       }
     }
 
