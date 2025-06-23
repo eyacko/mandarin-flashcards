@@ -1,19 +1,46 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Mandarin Flashcards</title>
   <style>
-    body { 
-      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif; 
-      margin: 0; 
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+      text-align: center;
+      background: white;
+    }
+
+    .page-container {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .left-strip {
+      width: 300px;
+      background-image: linear-gradient(to right, rgba(217,0,0,0.6) 0%, rgba(217,0,0,0.4) 30%, rgba(217,0,0,0.2) 60%, rgba(217,0,0,0) 100%);
+    }
+
+    .right-strip {
+      width: 300px;
+      background-image: linear-gradient(to right, rgba(217,0,0,0) 0%, rgba(217,0,0,0.2) 40%, rgba(217,0,0,0.4) 70%, rgba(217,0,0,0.6) 100%);
+    }
+
+    .main-content {
+      width: 600px; /* fixed width so content is centered */
+      margin-left: auto;
+      margin-right: auto;
+      padding-top: 100px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
       text-align: center;
-      padding-top: 100px;
     }
+
     #answer {
       border: none;
       border-bottom: 2px solid black;
@@ -25,52 +52,107 @@
       padding: 5px;
       background: transparent;
     }
+
     #question {
       font-size: 1.5em;
       width: 320px;
-      margin: 0 auto;
-      text-align: center;
+      margin: 0 auto 1em;
     }
-    #faceCanvas {
+
+    .button-row {
+      margin-top: 1em;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-submit {
+      font-size: 1.2em;
+      background-color: #D90000;
+      color: white;
+      padding: 0.5em 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-default {
+      font-size: 0.95em;
+      background-color: #DF6161;
+      color: white;
+      padding: 0.5em 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #result {
+      margin-top: 1em;
+      font-weight: bold;
+    }
+
+    #hint {
+      margin-top: 0.5em;
+      font-style: italic;
+      color: gray;
+    }
+
+    #bearCanvas {
       display: block;
       margin: 2em auto;
     }
   </style>
 </head>
 <body>
-  <h1 id="title">Mandarin Flashcards</h1>
-<div id="setup">
-  <p id="instructions">Welcome! Choose your desired settings below, then click start to begin.</p>
-  <label for="maxAttempts">Max attempts per card:</label>
-  <input type="number" id="maxAttempts" min="1" max="30" value="2"/>
-  <br></br>
-  <label for="langSelect">Language to respond in:</label>
-  <select id="langSelect">
-    <option value="">--Select--</option>
-    <option value="ch">汉语</option>
-    <option value="eng">English</option>
-  </select>
-  <br></br>
-  <label for="deckSelect">Flashcard deck:</label>
-  <select id="deckSelect">
-    <option value="">--Select--</option>
-  </select>
-  <br></br>
-  <button id="startButton" style="display: none;" onclick="startQuiz()">Start!</button>
-</div>
-<div id="quiz" style="display: none;">
-  <p id="question"></p>
-  <input type="text" id="answer" placeholder="" style="flex-shrink: 0; width: 320px; text-align: center;"/>
-  <br></br>
-  <button id="submitButton" onclick="submitAnswer()" style="font-size: 1.2em; background-color: #007BFF; color: white; padding: 0.5em 1em; border: none; border-radius: 5px;">Enter</button>
-  <p id="result"></p>
-  <p id="hint" style="font-style: italic; color: gray;"></p>
-  <button id="hintButton" style="display: none;" onclick="showHint()">Show Hint</button>
-  <button id="giveUpButton" style="display: none;" onclick="giveUp()">Give Up</button>
-  <button id="abortButton" onclick="abortQuiz()">Abort</button>
-</div>
-<button id="playAgainButton" style="display: none; margin-top: 5em;" onclick="resetQuiz()">Play Again</button>
-<canvas id="faceCanvas" width="150" height="150" style="margin-top: 5em;"></canvas>
+  <div class="page-container">
+    <div class="left-strip"></div>
+    <div class="main-content">
+      <h1 id="title" style="color: #B4011D;">Mandarin Flashcards</h1>
+      <div id="setup">
+        <p id="instructions">Choose your desired settings below, then click start to begin.</p>
+        <label for="maxAttempts">Max attempts per card:</label>
+        <input type="number" id="maxAttempts" min="1" max="30" value="2" />
+        <br /><br />
+        <label for="langSelect">Language to respond in:</label>
+        <select id="langSelect">
+          <option value="">--Select--</option>
+          <option value="ch">汉语</option>
+          <option value="eng">English</option>
+        </select>
+        <br /><br />
+        <label for="deckSelect">Flashcard deck:</label>
+        <select id="deckSelect">
+          <option value="">--Select--</option>
+        </select>
+        <br /><br />
+        <button id="startButton" style="display: none;" onclick="startQuiz()">Start!</button>
+      </div>
+
+      <div id="quiz" style="display: none;">
+        <p id="question"></p>
+        <input type="text" id="answer" placeholder="" style="flex-shrink: 0; width: 320px; text-align: center"/>
+        <br />
+
+	<div class="button-row">
+          <button id="submitButton" class="btn-submit" onclick="submitAnswer()">Enter</button>
+	</div>
+
+        <div class="button-row">
+          <button id="hintButton" class="btn-default" style="display: none;" onclick="showHint()">Show Hint</button>
+          <button id="giveUpButton" class="btn-default" style="display: none;" onclick="giveUp()">Give Up</button>
+          <button id="abortButton" class="btn-default" onclick="abortQuiz()">Abort</button>
+        </div>
+
+        <p id="result"></p>
+        <p id="hint"></p>
+      </div>
+
+      <button id="playAgainButton" style="display: none; margin-top: 5em" onclick="resetQuiz()">Play Again</button>
+      <canvas id="bearCanvas" width="150" height="150" style="margin-top: 5em"></canvas>
+    </div>
+    <div class="right-strip"></div>
+
+  </div>
 
   <script>
     let cards = [];
@@ -143,7 +225,7 @@
       if (current < cards.length) {
 	const entry = cards[current];
 	const prompt = (lang === 'ch') ? entry.question : entry.answer;
-        const canvas = document.getElementById('faceCanvas');
+        const canvas = document.getElementById('bearCanvas');
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         document.getElementById('question').textContent = prompt;
@@ -158,7 +240,7 @@
           document.getElementById('hintButton').style.display = 'none';
         }
       } else {
-        const canvas = document.getElementById('faceCanvas');
+        const canvas = document.getElementById('bearCanvas');
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         document.getElementById('quiz').style.display = 'none';
@@ -190,14 +272,14 @@
 	entry.retries++;
 	if (entry.retries < maxAttempts) {
 	  result.textContent = `Try again. ${maxAttempts - entry.retries} attempts remaining`;
-          result.style.color = "red";
+          result.style.color = "blue";
           drawFace('sad');
 	  document.getElementById('answer').value = '';
 	  document.getElementById('answer').focus();
 	  return;
 	} else {
           result.textContent = `Incorrect. The correct answer was: ${expected}`;
-          result.style.color = "red";
+          result.style.color = "blue";
           drawFace('angry');
 	  entry.retries = 0;
           waitingForNext = true;
@@ -217,7 +299,7 @@
 
       const result = document.getElementById('result');
       result.textContent = `The correct answer was: ${expected}`;
-      result.style.color = "red";
+      result.style.color = "blue";
       entry.retries = 0;
       waitingForNext = true;
       document.getElementById('giveUpButton').style.display = 'none';
@@ -236,7 +318,7 @@
     }
     function abortQuiz() {
       document.getElementById('giveUpButton').style.display = 'none';
-      const canvas = document.getElementById('faceCanvas');
+      const canvas = document.getElementById('bearCanvas');
       const ctx = canvas.getContext('2d');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       document.getElementById('quiz').style.display = 'none';
@@ -245,7 +327,7 @@
       resetQuiz();
     }
     function drawFace(emotion) {
-      const canvas = document.getElementById('faceCanvas');
+      const canvas = document.getElementById('bearCanvas');
       const ctx = canvas.getContext('2d');
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
