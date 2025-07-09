@@ -1,0 +1,113 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+  text-align: center;
+  background: #B8D3D1;
+  color: #0C1618
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+input, select {
+  font-size: 1.2rem;
+  margin-left: 10px;
+  border-radius: 8px;
+}
+
+label {
+  font-size: 1.2rem;
+}
+
+.main-content {
+  padding-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+#answer {
+  border: none;
+  border-radius: 0;
+  border-bottom: 2px solid black;
+  outline: none;
+  font-size: 1.8rem;
+  text-align: center;
+  width: 320px;
+  margin: 0 auto;
+  padding: 5px;
+  background: transparent;
+}
+
+#title {
+  color: #B4011D;
+}
+
+#question {
+  font-size: 1.8rem;
+  width: 320px;
+  margin: 0 auto 1rem;
+}
+
+.button-row {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+}
+
+.btn-submit {
+  font-size: 1.5rem;
+  background-color: #DF0122;
+  color: white;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.btn-default {
+  font-size: 1.2rem;
+  background-color: #FE4864;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-start {
+  background-color: #D1AC00;
+  color: #0C1618;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  max-width: 200px;
+  padding: 1rem 1.8rem;
+  border-radius: 15px;
+}
+
+#result {
+  margin-top: 1.2rem;
+  font-weight: bold;
+}
+
+#hint {
+  margin-top: 0.8rem;
+  font-style: italic;
+  color: gray;
+}
+
+#bearCanvas {
+  display: block;
+  margin: 2rem auto;
+}
+
