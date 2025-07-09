@@ -15,6 +15,10 @@
 		"path": "vocab/food/fruits.csv"
 	},
 	{
+		"topic": "vegetables",
+		"path": "vocab/food/veg.csv"
+	},
+	{
 		"topic": "countries and languages",
 		"path": "vocab/CL110/countries.csv"
 	},
