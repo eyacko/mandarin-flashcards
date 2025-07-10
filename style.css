@@ -5,11 +5,15 @@ html, body {
   font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif;
   text-align: center;
   background: #B8D3D1;
-  color: #0C1618
+  color: #0C1618;
 }
 
 h1 {
   font-size: 3rem;
+}
+
+tr {
+  text-align: left;
 }
 
 input, select {
@@ -23,7 +27,8 @@ label {
 }
 
 .main-content {
-  padding-top: 100px;
+  min-height: 100vh;
+  padding-top: 6rem;
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -145,10 +150,18 @@ label {
 }
 
 #previewContent {
+  max-height: 80vh;
+  overflow-y: auto;
   padding: 20px;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
+}
+
+#csv-table table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2rem 1rem;
 }
 
