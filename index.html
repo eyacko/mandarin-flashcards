@@ -19,7 +19,7 @@
     <label for="langSelect">Language to respond in:</label>
     <select id="langSelect">
       <option value="">--Select--</option>
-      <option value="ch">汉语</option>
+      <option value="zh">汉语</option>
       <option value="eng">English</option>
     </select>
     <br /><br />
@@ -28,6 +28,8 @@
       <option value="">--Select--</option>
     </select>
     <br /><br /><br />
+    <button id="previewButton" class="btn-preview" style="display: none;" onclick="previewDeck()">Preview Deck</button>
+    <br /><br />
     <button id="startButton" class="btn-start" style="display: none;" onclick="startQuiz()">Start!</button>
   </div>
 
@@ -50,7 +52,15 @@
     <p id="hint"></p>
   </div>
 
-  <button id="playAgainButton" style="display: none; margin-top: 5em" onclick="resetQuiz()">Play Again</button>
+  <div id="deckPreview" style="display: none;">
+    <div id="previewContent">
+      <div id="csv-table" style="display: none;"></div>
+      <br />
+      <button id="closePreviewButton" class="btn-close">Close</button>
+    </div>
+  </div>
+
+  <button id="playAgainButton" class="btn-default" style="display: none; margin-top: 5em" onclick="resetQuiz()">Play Again</button>
   <canvas id="bearCanvas" width="150" height="150" style="margin-top: 3em"></canvas>
 </div>
 
@@ -58,7 +68,7 @@
   <script>
     let cards = [];
     let current = 0;
-    let lang = 'ch';
+    let lang = 'zh';
     let waitingForNext = false;
     let maxAttempts = 2;
 
@@ -88,17 +98,21 @@
       const deckSelected = document.getElementById('deckSelect').value;
       const langSelected = document.getElementById('langSelect').value;
       const startButton = document.getElementById('startButton');
+      const previewButton = document.getElementById('previewButton');
+
 
       if (deckSelected && langSelected) {
         startButton.style.display = 'inline-block';
+        previewButton.style.display = 'inline-block';
       } else {
         startButton.style.display = 'none';
+        previewButton.style.display = 'none';
       }
     }
     function startQuiz() {
       const file = document.getElementById('deckSelect').value;
       lang = document.getElementById('langSelect').value;
-      maxAttempts = parseInt(document.getElementById('maxAttempts').value) || 5;
+      maxAttempts = parseInt(document.getElementById('maxAttempts').value) || 2;
 
       fetch(file)
       .then(response => response.text())
@@ -122,10 +136,37 @@
         document.getElementById('question').textContent = "Error loading file.";
       });
     }
+    function previewDeck() {
+      document.getElementById('deckPreview').style.display = 'flex';
+      document.getElementById('csv-table').textContent = '';
+      const file = document.getElementById('deckSelect').value;
+      fetch(file)
+        .then(response => response.text())
+        .then(text => {
+          const rows = text.trim().split("\n").map(row => row.split(","));
+          const table = document.createElement('table');
+
+          rows.forEach((row, index) => {
+            const tr = document.createElement("tr");
+            row.forEach(cell => {
+              const el = document.createElement(index === 0 ? "th" : "td");
+              el.textContent = cell;
+              tr.appendChild(el);
+            });
+            table.appendChild(tr);
+          });
+
+          document.getElementById('csv-table').appendChild(table);
+        });
+        document.getElementById('csv-table').style.display = 'block';
+    }
+    function closeDeckPreview() {
+      document.getElementById('deckPreview').style.display = 'none';
+    }
     function showQuestion() {
       if (current < cards.length) {
 	const entry = cards[current];
-	const prompt = (lang === 'ch') ? entry.question : entry.answer;
+	const prompt = (lang === 'zh') ? entry.question : entry.answer;
         const canvas = document.getElementById('bearCanvas');
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -159,7 +200,7 @@
       }
       const userAnswer = document.getElementById('answer').value.trim();
       const entry = cards[current];
-      const expected = (lang === 'ch') ? entry.answer : entry.question;
+      const expected = (lang === 'zh') ? entry.answer : entry.question;
       const result = document.getElementById('result');
 
       if (userAnswer.toLowerCase() === expected.toLowerCase()) {
@@ -196,7 +237,7 @@
     }
     function giveUp() {
       const entry = cards[current];
-      const expected = (lang === 'ch') ? entry.answer : entry.question;
+      const expected = (lang === 'zh') ? entry.answer : entry.question;
 
       const result = document.getElementById('result');
       result.textContent = `The correct answer was: ${expected}`;
@@ -207,11 +248,13 @@
     }
     function resetQuiz() {
       document.getElementById('playAgainButton').style.display = 'none';
+      document.getElementById('previewButton').style.display = 'none';
       document.getElementById('setup').style.display = 'block';
       document.getElementById('title').style.display = 'block';
       document.getElementById('title').textContent = 'Mandarin Flashcards';
       document.getElementById('deckSelect').value = '';
-      document.getElementById('langSelect').value = 'ch';
+      document.getElementById('langSelect').value = 'zh';
+      document.getElementById('csv-table').textContent = '';
       cards = [];
       current = 0;
       waitingForNext = false;
@@ -252,7 +295,7 @@
       ctx.arc(30, 25, 25, Math.PI * 0.75, Math.PI * 1.8, false); // left ear
       ctx.fillStyle = '#B07063';
       ctx.fill();
-      linewidth = 2;
+      ctx.linewidth = 2;
       ctx.strokeStyle = '#000000';
       ctx.stroke();
 
@@ -260,7 +303,7 @@
       ctx.arc(120, 25, 25, Math.PI * 0.25, Math.PI * 1.2, true); // right ear
       ctx.fillStyle = '#B07063';
       ctx.fill();
-      linewidth = 2;
+      ctx.linewidth = 2;
       ctx.strokeStyle = '#000000';
       ctx.stroke();
 
@@ -310,6 +353,7 @@
     document.addEventListener("DOMContentLoaded", function () {
       document.getElementById('deckSelect').addEventListener('change', updateStartButtonVisibility);
       document.getElementById('langSelect').addEventListener('change', updateStartButtonVisibility);
+      document.getElementById('closePreviewButton').addEventListener('click', closeDeckPreview);
 
       document.getElementById('answer').addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {

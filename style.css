@@ -86,13 +86,33 @@ label {
 .btn-start {
   background-color: #D1AC00;
   color: #0C1618;
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: bold;
   cursor: pointer;
   width: 100%;
   max-width: 200px;
-  padding: 1rem 1.8rem;
-  border-radius: 15px;
+  padding: 1.2rem 1.8rem;
+  border-radius: 25px;
+}
+
+.btn-preview {
+  background-color: #FFE985;
+  color: #0C1618;
+  font-size: 1.3rem;
+  cursor: pointer;
+  max-width: 200px;
+  padding: 1rem 1.2rem;
+  border-radius: 20px;
+}
+
+.btn-close {
+  font-size: 1.2rem;
+  background-color: #FE4864;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 #result {
@@ -109,5 +129,26 @@ label {
 #bearCanvas {
   display: block;
   margin: 2rem auto;
+}
+
+#deckPreview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#previewContent {
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
