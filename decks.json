@@ -37,5 +37,9 @@
 	{
 		"topic": "chapter 4 vocab",
 		"path": "vocab/CL110/ch4.csv"
+	},
+	{
+		"topic": "chapter 5 vocab",
+		"path": "vocab/CL110/ch5.csv"
 	}
 ]
