@@ -22,13 +22,13 @@ input, select {
   border-radius: 8px;
 }
 
-label {
+label, p {
   font-size: 1.2rem;
 }
 
 .main-content {
   min-height: 100vh;
-  padding-top: 6rem;
+  padding-top: 3rem;
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -51,13 +51,24 @@ label {
 }
 
 #title {
-  color: #04669F;
+  color: #034D77;
 }
 
 #question {
   font-size: 1.8rem;
   width: 320px;
   margin: 0 auto 1rem;
+}
+
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 2em;
+  margin-top: 1em;
+}
+
+.button-grid button: hover {
+  background-color: #C0E89A;
 }
 
 .button-row {
@@ -120,6 +131,18 @@ label {
   cursor: pointer;
 }
 
+.btn-play-again {
+  background-color: #04669F;
+  color: white;
+  font-size: 2.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  max-width: 200px;
+  padding: 1.2rem 1.8rem;
+  border-radius: 25px;
+}
+
 #result {
   margin-top: 1.2rem;
   font-weight: bold;
@@ -163,5 +186,20 @@ label {
   width: 100%;
   border-collapse: separate;
   border-spacing: 2rem 1rem;
+}
+
+#deckButtons button {
+  font-size: 1.2rem;
+  background-color: #04669F;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+#deckButtons button.selected {
+  opacity: 1;
 }
 

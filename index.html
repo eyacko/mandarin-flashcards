@@ -12,7 +12,9 @@
   <h1 id="title">Mandarin Flashcards</h1>
   <div id="setup">
     <h3 id="instructions">Choose your desired settings below, then click start to begin.</h3>
-    <br />
+    <p>Select the deck:</p>
+    <div id="deckButtons" class="button-grid"></div>
+    <br /><br />
     <label for="maxAttempts">Max attempts per card:</label>
     <input type="number" id="maxAttempts" min="1" max="30" value="2" />
     <br /><br />
@@ -21,11 +23,6 @@
       <option value="">--Select--</option>
       <option value="zh">汉语</option>
       <option value="eng">English</option>
-    </select>
-    <br /><br />
-    <label for="deckSelect">Flashcard deck:</label>
-    <select id="deckSelect">
-      <option value="">--Select--</option>
     </select>
     <br /><br /><br />
     <button id="previewButton" class="btn-preview" style="display: none;" onclick="previewDeck()">Preview Deck</button>
@@ -60,7 +57,7 @@
     </div>
   </div>
 
-  <button id="playAgainButton" class="btn-default" style="display: none; margin-top: 5em" onclick="resetQuiz()">Play Again</button>
+  <button id="playAgainButton" class="btn-play-again" style="display: none; margin-top: 5em" onclick="resetQuiz()">Play Again</button>
   <canvas id="bearCanvas" width="150" height="150" style="margin-top: 3em"></canvas>
 </div>
 
@@ -71,6 +68,7 @@
     let lang = 'zh';
     let waitingForNext = false;
     let maxAttempts = 2;
+    let chosenDeck = '';
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -83,23 +81,29 @@
     fetch('decks.json')
       .then(response => response.json())
       .then(files => {
-        const select = document.getElementById('deckSelect');
+        const category = document.getElementById('deckButtons');
         files.forEach(file => {
-	  const option = document.createElement('option');
-	  option.value = file.path;
-	  option.textContent = file.topic;
-	  select.appendChild(option);
+	  const btn = document.createElement('button');
+	  btn.className = 'btn-default';
+	  btn.value = file.path;
+	  btn.textContent = file.topic;
+	  btn.onclick = () => {
+	    chosenDeck = file.path;
+            updateStartButtonVisibility();
+            document.querySelectorAll('#deckButtons button').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+	  };
+	  category.appendChild(btn);
 	});
     });
     function loadSelectedFile() {
       updateStartButtonVisibility();
     }
     function updateStartButtonVisibility() {
-      const deckSelected = document.getElementById('deckSelect').value;
+      const deckSelected = chosenDeck;
       const langSelected = document.getElementById('langSelect').value;
       const startButton = document.getElementById('startButton');
       const previewButton = document.getElementById('previewButton');
-
 
       if (deckSelected && langSelected) {
         startButton.style.display = 'inline-block';
@@ -110,7 +114,7 @@
       }
     }
     function startQuiz() {
-      const file = document.getElementById('deckSelect').value;
+      const file = chosenDeck;
       lang = document.getElementById('langSelect').value;
       maxAttempts = parseInt(document.getElementById('maxAttempts').value) || 2;
 
@@ -139,7 +143,7 @@
     function previewDeck() {
       document.getElementById('deckPreview').style.display = 'flex';
       document.getElementById('csv-table').textContent = '';
-      const file = document.getElementById('deckSelect').value;
+      const file = chosenDeck;
       fetch(file)
         .then(response => response.text())
         .then(text => {
@@ -254,7 +258,7 @@
       document.getElementById('setup').style.display = 'block';
       document.getElementById('title').style.display = 'block';
       document.getElementById('title').textContent = 'Mandarin Flashcards';
-      document.getElementById('deckSelect').value = '';
+      chosenDeck = '';
       document.getElementById('langSelect').value = 'zh';
       document.getElementById('csv-table').textContent = '';
       cards = [];
@@ -262,6 +266,7 @@
       waitingForNext = false;
       document.getElementById('hint').textContent = '';
       document.getElementById('hintButton').style.display = 'none';
+      document.querySelectorAll('#deckButtons button').forEach(b => b.classList.remove('selected'));
     }
     function abortQuiz() {
       document.getElementById('giveUpButton').style.display = 'none';
@@ -353,7 +358,6 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById('deckSelect').addEventListener('change', updateStartButtonVisibility);
       document.getElementById('langSelect').addEventListener('change', updateStartButtonVisibility);
       document.getElementById('closePreviewButton').addEventListener('click', closeDeckPreview);
 

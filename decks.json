@@ -1,45 +1,56 @@
 [
 	{
 		"topic": "colours",
+		"category": "general",
 		"path": "vocab/colours.csv"
 	},
 	{
 		"topic": "zodiac animals",
+		"category": "animals",
 		"path": "vocab/animals/zodiac.csv"
 	},
 	{	"topic": "mammals",
+		"category": "animals",
 		"path": "vocab/animals/mammals.csv"
 	},
 	{
 		"topic": "fruits",
+		"category": "food",
 		"path": "vocab/food/fruits.csv"
 	},
 	{
 		"topic": "vegetables",
+		"category": "food",
 		"path": "vocab/food/veg.csv"
 	},
 	{
 		"topic": "countries and languages",
+		"category": "general",
 		"path": "vocab/CL110/countries.csv"
 	},
 	{
 		"topic": "chapter 1 vocab",
+		"category": "CL110",
 		"path": "vocab/CL110/ch1.csv"
 	},
 	{
 		"topic": "chapter 2 vocab",
+		"category": "CL110",
 		"path": "vocab/CL110/ch2.csv"
 	},
 	{
 		"topic": "chapter 3 vocab",
+		"category": "CL110",
 		"path": "vocab/CL110/ch3.csv"
 	},
 	{
 		"topic": "chapter 4 vocab",
+		"category": "CL110",
 		"path": "vocab/CL110/ch4.csv"
 	},
 	{
 		"topic": "chapter 5 vocab",
+		"category": "CL110",
 		"path": "vocab/CL110/ch5.csv"
 	}
 ]
