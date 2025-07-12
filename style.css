@@ -4,7 +4,7 @@ html, body {
   padding: 0;
   font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif;
   text-align: center;
-  background: #B8D3D1;
+  background: #DADDD8;
   color: #0C1618;
 }
 
@@ -51,7 +51,7 @@ label {
 }
 
 #title {
-  color: #B4011D;
+  color: #04669F;
 }
 
 #question {
@@ -70,7 +70,7 @@ label {
 
 .btn-submit {
   font-size: 1.5rem;
-  background-color: #DF0122;
+  background-color: #78309C;
   color: white;
   padding: 0.8rem 1.2rem;
   border: none;
@@ -80,7 +80,7 @@ label {
 
 .btn-default {
   font-size: 1.2rem;
-  background-color: #FE4864;
+  background-color: #AB63CF;
   color: white;
   padding: 0.5rem 1rem;
   border: none;
@@ -89,7 +89,7 @@ label {
 }
 
 .btn-start {
-  background-color: #D1AC00;
+  background-color: #E59500;
   color: #0C1618;
   font-size: 2.2rem;
   font-weight: bold;
@@ -101,7 +101,7 @@ label {
 }
 
 .btn-preview {
-  background-color: #FFE985;
+  background-color: #FFCD70;
   color: #0C1618;
   font-size: 1.3rem;
   cursor: pointer;
@@ -112,7 +112,7 @@ label {
 
 .btn-close {
   font-size: 1.2rem;
-  background-color: #FE4864;
+  background-color: #AB63CF;
   color: white;
   padding: 0.5rem 1rem;
   border: none;

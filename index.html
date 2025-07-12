@@ -205,11 +205,12 @@
 
       if (userAnswer.toLowerCase() === expected.toLowerCase()) {
         result.textContent = "Correct!";
-        result.style.color = "green";
+        result.style.color = "red";
 	drawFace('happy');
 	entry.retries = 0;
 	waitingForNext = true;
 	document.getElementById('giveUpButton').style.display = 'none';
+        document.getElementById('answer').value = '';
       } else {
 	entry.retries++;
 	if (entry.retries < maxAttempts) {
@@ -226,6 +227,7 @@
 	  entry.retries = 0;
           waitingForNext = true;
           document.getElementById('giveUpButton').style.display = 'none';
+          document.getElementById('answer').value = '';
 	}
       }
     }
