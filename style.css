@@ -188,7 +188,7 @@ label, p {
   border-spacing: 2rem 1rem;
 }
 
-#deckButtons button {
+#deckButtons button, #topicButtons button {
   font-size: 1.2rem;
   background-color: #04669F;
   color: white;
@@ -199,7 +199,7 @@ label, p {
   opacity: 0.5;
 }
 
-#deckButtons button.selected {
+#deckButtons button.selected, #topicButtons button.selected {
   opacity: 1;
 }
 

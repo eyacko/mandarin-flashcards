@@ -14,6 +14,7 @@
     <h3 id="instructions">Choose your desired settings below, then click start to begin.</h3>
     <p>Select the deck:</p>
     <div id="deckButtons" class="button-grid"></div>
+    <div id="topicButtons" class="button-grid" style="display: none;"></div>
     <br /><br />
     <label for="maxAttempts">Max attempts per card:</label>
     <input type="number" id="maxAttempts" min="1" max="30" value="2" />
@@ -69,6 +70,7 @@
     let waitingForNext = false;
     let maxAttempts = 2;
     let chosenDeck = '';
+    let categoryMap = {};
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -81,20 +83,43 @@
     fetch('decks.json')
       .then(response => response.json())
       .then(files => {
-        const category = document.getElementById('deckButtons');
-        files.forEach(file => {
+        categoryMap = files.reduce((map, entry) => {
+          if (!map[entry.category]){
+            map[entry.category] = [];
+          }
+          map[entry.category].push(entry);
+          return map;
+        }, {});
+
+        const categoryContainer = document.getElementById('deckButtons');
+	Object.keys(categoryMap).forEach(category => {
 	  const btn = document.createElement('button');
+	  btn.textContent = category;
 	  btn.className = 'btn-default';
-	  btn.value = file.path;
-	  btn.textContent = file.topic;
 	  btn.onclick = () => {
-	    chosenDeck = file.path;
-            updateStartButtonVisibility();
-            document.querySelectorAll('#deckButtons button').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
+	    const categoryTopics = categoryMap[category];
+	    categoryContainer.style.display = 'none';
+	    const topicContainer = document.getElementById('topicButtons');
+	    topicContainer.innerHTML = '';
+            categoryTopics.forEach(file => {
+	      const btn = document.createElement('button');
+	      btn.className = 'btn-default';
+	      btn.value = file.path;
+	      btn.textContent = file.topic;
+	      btn.onclick = () => {
+	        chosenDeck = file.path;
+                updateStartButtonVisibility();
+                document.querySelectorAll('#topicButtons button').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+	      };
+	      topicContainer.appendChild(btn);
+	    });
+	    topicContainer.style.display = 'grid';
 	  };
-	  category.appendChild(btn);
+	  categoryContainer.appendChild(btn);
 	});
+
+
     });
     function loadSelectedFile() {
       updateStartButtonVisibility();
@@ -259,7 +284,7 @@
       document.getElementById('title').style.display = 'block';
       document.getElementById('title').textContent = 'Mandarin Flashcards';
       chosenDeck = '';
-      document.getElementById('langSelect').value = 'zh';
+      document.getElementById('langSelect').value = '';
       document.getElementById('csv-table').textContent = '';
       cards = [];
       current = 0;
@@ -267,6 +292,9 @@
       document.getElementById('hint').textContent = '';
       document.getElementById('hintButton').style.display = 'none';
       document.querySelectorAll('#deckButtons button').forEach(b => b.classList.remove('selected'));
+      document.querySelectorAll('#topicButtons button').forEach(b => b.classList.remove('selected'));
+      document.getElementById('deckButtons').style.display = 'grid';
+      document.getElementById('topicButtons').style.display = 'none';
     }
     function abortQuiz() {
       document.getElementById('giveUpButton').style.display = 'none';
