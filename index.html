@@ -12,9 +12,11 @@
   <h1 id="title">Mandarin Flashcards</h1>
   <div id="setup">
     <h3 id="instructions">Choose your desired settings below, then click start to begin.</h3>
-    <p>Select the deck:</p>
-    <div id="deckButtons" class="button-grid"></div>
+    <p id="selectDeckText">Select the category:</p>
+    <div id="categoryButtons" class="button-grid"></div>
     <div id="topicButtons" class="button-grid" style="display: none;"></div>
+    <br />
+    <button id="backButton" class="btn-back" style="display: none;">&laquo; Back</button>
     <br /><br />
     <label for="maxAttempts">Max attempts per card:</label>
     <input type="number" id="maxAttempts" min="1" max="30" value="2" />
@@ -91,12 +93,14 @@
           return map;
         }, {});
 
-        const categoryContainer = document.getElementById('deckButtons');
+        const categoryContainer = document.getElementById('categoryButtons');
 	Object.keys(categoryMap).forEach(category => {
 	  const btn = document.createElement('button');
-	  btn.textContent = category;
+	  btn.textContent = capitalize(category);
 	  btn.className = 'btn-default';
 	  btn.onclick = () => {
+	    document.getElementById('selectDeckText').textContent = 'Select the deck:';
+	    document.getElementById('backButton').style.display = 'inline-block';
 	    const categoryTopics = categoryMap[category];
 	    categoryContainer.style.display = 'none';
 	    const topicContainer = document.getElementById('topicButtons');
@@ -105,7 +109,7 @@
 	      const btn = document.createElement('button');
 	      btn.className = 'btn-default';
 	      btn.value = file.path;
-	      btn.textContent = file.topic;
+	      btn.textContent = capitalize(file.topic);
 	      btn.onclick = () => {
 	        chosenDeck = file.path;
                 updateStartButtonVisibility();
@@ -280,9 +284,11 @@
     function resetQuiz() {
       document.getElementById('playAgainButton').style.display = 'none';
       document.getElementById('previewButton').style.display = 'none';
+      document.getElementById('backButton').style.display = 'none';
       document.getElementById('setup').style.display = 'block';
       document.getElementById('title').style.display = 'block';
       document.getElementById('title').textContent = 'Mandarin Flashcards';
+      document.getElementById('selectDeckText').textContent = 'Select the category:';
       chosenDeck = '';
       document.getElementById('langSelect').value = '';
       document.getElementById('csv-table').textContent = '';
@@ -291,9 +297,9 @@
       waitingForNext = false;
       document.getElementById('hint').textContent = '';
       document.getElementById('hintButton').style.display = 'none';
-      document.querySelectorAll('#deckButtons button').forEach(b => b.classList.remove('selected'));
+      document.querySelectorAll('#categoryButtons button').forEach(b => b.classList.remove('selected'));
       document.querySelectorAll('#topicButtons button').forEach(b => b.classList.remove('selected'));
-      document.getElementById('deckButtons').style.display = 'grid';
+      document.getElementById('categoryButtons').style.display = 'grid';
       document.getElementById('topicButtons').style.display = 'none';
     }
     function abortQuiz() {
@@ -384,10 +390,24 @@
 	ctx.stroke();
       }
     }
+    function capitalize(str){
+      return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    }
 
     document.addEventListener("DOMContentLoaded", function () {
       document.getElementById('langSelect').addEventListener('change', updateStartButtonVisibility);
       document.getElementById('closePreviewButton').addEventListener('click', closeDeckPreview);
+
+      document.getElementById('backButton').addEventListener('click', () => {
+        chosenDeck = '';
+        document.getElementById('backButton').style.display = 'none';
+	document.getElementById('previewButton').style.display = 'none';
+	document.getElementById('startButton').style.display = 'none';
+	document.getElementById('selectDeckText').textContent = 'Select the category:';
+	document.getElementById('topicButtons').innerHTML = '';
+        document.getElementById('topicButtons').style.display = 'none';
+        document.getElementById('categoryButtons').style.display = 'grid';
+      });
 
       document.getElementById('answer').addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {

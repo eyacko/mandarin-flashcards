@@ -67,10 +67,6 @@ label, p {
   margin-top: 1em;
 }
 
-.button-grid button: hover {
-  background-color: #C0E89A;
-}
-
 .button-row {
   margin-top: 2rem;
   margin-bottom: 2rem;
@@ -121,9 +117,9 @@ label, p {
   border-radius: 20px;
 }
 
-.btn-close {
+.btn-close, .btn-back {
   font-size: 1.2rem;
-  background-color: #AB63CF;
+  background-color: #6F7868;
   color: white;
   padding: 0.5rem 1rem;
   border: none;
@@ -188,7 +184,7 @@ label, p {
   border-spacing: 2rem 1rem;
 }
 
-#deckButtons button, #topicButtons button {
+#categoryButtons button, #topicButtons button {
   font-size: 1.2rem;
   background-color: #04669F;
   color: white;
@@ -199,7 +195,7 @@ label, p {
   opacity: 0.5;
 }
 
-#deckButtons button.selected, #topicButtons button.selected {
+#categoryButtons button.selected, #topicButtons button.selected {
   opacity: 1;
 }
 
