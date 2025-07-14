@@ -60,7 +60,7 @@
     </div>
   </div>
 
-  <button id="playAgainButton" class="btn-play-again" style="display: none; margin-top: 5em" onclick="resetQuiz()">Play Again</button>
+  <button id="playAgainButton" class="btn-play-again" style="display: none;" onclick="resetQuiz()">Play Again</button>
   <canvas id="bearCanvas" width="150" height="150" style="margin-top: 3em"></canvas>
 </div>
 
@@ -74,6 +74,7 @@
     let chosenDeck = '';
     let categoryMap = {};
 
+    // Shuffle the deck
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -81,10 +82,11 @@
       }
     }
 
-    // Load CSV file
+    // Choose the deck
     fetch('decks.json')
       .then(response => response.json())
       .then(files => {
+	// Get decks for each category
         categoryMap = files.reduce((map, entry) => {
           if (!map[entry.category]){
             map[entry.category] = [];
@@ -93,11 +95,13 @@
           return map;
         }, {});
 
+	// Create a button for each category
         const categoryContainer = document.getElementById('categoryButtons');
 	Object.keys(categoryMap).forEach(category => {
 	  const btn = document.createElement('button');
 	  btn.textContent = capitalize(category);
 	  btn.className = 'btn-default';
+	  // Create a button for each deck in the selected category
 	  btn.onclick = () => {
 	    document.getElementById('selectDeckText').textContent = 'Select the deck:';
 	    document.getElementById('backButton').style.display = 'inline-block';
@@ -125,9 +129,6 @@
 
 
     });
-    function loadSelectedFile() {
-      updateStartButtonVisibility();
-    }
     function updateStartButtonVisibility() {
       const deckSelected = chosenDeck;
       const langSelected = document.getElementById('langSelect').value;
@@ -147,6 +148,7 @@
       lang = document.getElementById('langSelect').value;
       maxAttempts = parseInt(document.getElementById('maxAttempts').value) || 2;
 
+      // Read in and parse the file
       fetch(file)
       .then(response => response.text())
       .then(text => {
@@ -308,8 +310,6 @@
       const ctx = canvas.getContext('2d');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       document.getElementById('quiz').style.display = 'none';
-      document.getElementById('hint').textContent = '';
-      document.getElementById('hintButton').style.display = 'none';
       resetQuiz();
     }
     function drawFace(emotion) {
@@ -318,22 +318,25 @@
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      // Head
       ctx.beginPath();
-      ctx.arc(75, 75, 70, 0, Math.PI * 2); // big circle
+      ctx.arc(75, 75, 70, 0, Math.PI * 2);
       ctx.fillStyle = '#B07063';
       ctx.fill();
       linewidth = 2;
       ctx.strokeStyle = '#000000';
       ctx.stroke();
 
+      // Eyes
       ctx.beginPath();
-      ctx.arc(50, 60, 7, 0, Math.PI * 2); // left eye
-      ctx.arc(100, 60, 7, 0, Math.PI * 2); // right eye
+      ctx.arc(50, 60, 7, 0, Math.PI * 2);
+      ctx.arc(100, 60, 7, 0, Math.PI * 2);
       ctx.fillStyle = '#000000';
       ctx.fill();
 
+      // Ears
       ctx.beginPath();
-      ctx.arc(30, 25, 25, Math.PI * 0.75, Math.PI * 1.8, false); // left ear
+      ctx.arc(30, 25, 25, Math.PI * 0.75, Math.PI * 1.8, false);
       ctx.fillStyle = '#B07063';
       ctx.fill();
       ctx.linewidth = 2;
@@ -341,19 +344,20 @@
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(120, 25, 25, Math.PI * 0.25, Math.PI * 1.2, true); // right ear
+      ctx.arc(120, 25, 25, Math.PI * 0.25, Math.PI * 1.2, true);
       ctx.fillStyle = '#B07063';
       ctx.fill();
       ctx.linewidth = 2;
       ctx.strokeStyle = '#000000';
       ctx.stroke();
 
+      // Nose
       ctx.beginPath();
-      ctx.ellipse(75, 85, 9, 6, 0, 0, Math.PI * 2); // nose
+      ctx.ellipse(75, 85, 9, 6, 0, 0, Math.PI * 2);
       ctx.fillStyle = '#000000';
       ctx.fill();
 
-      // mouth
+      // Mouth
       if (emotion === 'happy') {
         ctx.beginPath();
         ctx.moveTo(75, 89.5);
@@ -379,6 +383,8 @@
         ctx.lineTo(90, 111);
         ctx.stroke();
       }
+
+      // Angry eyebrows
       if (emotion === 'angry') {
         ctx.beginPath();
 	ctx.moveTo(81, 50);

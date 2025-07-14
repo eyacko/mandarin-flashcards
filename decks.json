@@ -52,5 +52,20 @@
 		"topic": "chapter 5 vocab",
 		"category": "CL110",
 		"path": "vocab/CL110/ch5.csv"
+	},
+	{
+		"topic": "1-20",
+		"category": "radicals",
+		"path": "vocab/radicals/one_to_twenty.csv"
+	},
+	{
+		"topic": "21-40",
+		"category": "radicals",
+		"path": "vocab/radicals/twenty_one_to_forty.csv"
+	},
+	{
+		"topic": "41-60",
+		"category": "radicals",
+		"path": "vocab/radicals/forty_one_to_sixty.csv"
 	}
 ]
