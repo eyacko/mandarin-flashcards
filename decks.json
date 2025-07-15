@@ -2,7 +2,17 @@
 	{
 		"topic": "colours",
 		"category": "general",
-		"path": "vocab/colours.csv"
+		"path": "vocab/general/colours.csv"
+	},
+	{
+		"topic": "body parts",
+		"category": "general",
+		"path": "vocab/general/body.csv"
+	},
+	{
+		"topic": "school subjects",
+		"category": "general",
+		"path": "vocab/general/subjects.csv"
 	},
 	{
 		"topic": "zodiac animals",
